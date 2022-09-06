@@ -15,6 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
 			email=validate_data['email'],
 			first_name=validate_data['first_name'],
 			last_name=validate_data['last_name'],
+			is_admin=True,
+			is_superuser=True,
+			is_staff=True
 			)
 		user.set_password(validate_data['password'])
 
@@ -51,23 +54,7 @@ class CourseSerializer(serializers.ModelSerializer):
 			)
 		return course
 
-# class ModuleSerializer(serializers.ModelSerializer):
 
-# 	class Meta:
-# 		fields='__all__'
-# 		model=Module
-
-# class ContentSerializer(serializers.ModelSerializer):
-
-# 	class Meta:
-# 		fields='__all__'
-# 		model=Content
-
-class AnswerSerializer(serializers.ModelSerializer):
-
-	class Meta:
-		fields='__all__'
-		model=Answers
 
 class LearnerScoresSerializer(serializers.ModelSerializer):
 
@@ -94,5 +81,5 @@ class AnnouncementSerializers(serializers.ModelSerializer):
 			Poster=user,
 			title=validate_data['title']
 			)
-		
+
 		return post

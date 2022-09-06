@@ -15,7 +15,8 @@ class InstructorSerializer(serializers.ModelSerializer):
 			email=validate_data['email'],
 			first_name=validate_data['first_name'],
 			last_name=validate_data['last_name'],
-			is_instructor=True
+			is_instructor=True,
+			is_staff=True
 			)
 		user.set_password(validate_data['password'])
 
@@ -46,3 +47,8 @@ class ICourseModule(serializers.ModelSerializer):
 	class Meta:
 		model=Module
 		fields=['course','title','body','point', 'closing_date']
+
+class IGrading(serializers.ModelSerializer):
+	class Meta:
+		model=LearnerScores
+		fields=['learner','answers','score']

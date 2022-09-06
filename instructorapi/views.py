@@ -23,4 +23,16 @@ class ICourseModuleeditView(generics.RetrieveUpdateAPIView):
 
 class ICourseModuledeleteView(generics.RetrieveDestroyAPIView):
 	queryset=Module.objects.all()
-	serializer_class=ICourseModule	
+	serializer_class=ICourseModule
+
+class IGradingView(generics.ListCreateAPIView):
+	queryset=LearnerScores.objects.all()
+	serializer_class=IGrading
+
+class IEditGradingView(generics.RetrieveUpdateAPIView):
+	queryset=LearnerScores.objects.all()
+	serializer_class=IGrading
+
+class IDeleteGradingView(generics.RetrieveDestroyAPIView):
+	queryset=LearnerScores.objects.all()
+	serializer_class=IGrading	

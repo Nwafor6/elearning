@@ -11,11 +11,12 @@ Instructors:
 1:Able to register as an instructor <done>
 2:Able to register the course they will be teaching as much as possible <done>
 3:Able to create, edit and delete a course, module and content of their own track <done>
-4:Able to post Post annonuncement
+4:Able to post, edit and delete annonuncement <done>
+5: able to grade students
 
 
 Admin:
-1:Able to create, delete, view all users
+1:Able to create, delete, view all users <done>
 2:Able to create course, delete and update
 3:Able to Post annonuncement
 4:

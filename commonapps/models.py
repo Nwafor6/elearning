@@ -82,8 +82,8 @@ class Answers(models.Model):
 
 
 class LearnerScores(models.Model):
-	learner=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	answers = models.ForeignKey(Answers,on_delete=models.CASCADE)
+	learner=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+	answers = models.ForeignKey(Answers,on_delete=models.CASCADE, null=True, blank=True)
 	score=models.PositiveIntegerField(default=0)
 	graded_on=models.DateTimeField(auto_now_add=True,blank=True, null=True)
 
