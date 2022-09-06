@@ -1,0 +1,21 @@
+This is the detail of what each user showuld be able to do
+
+1: Learner able to sign up <done>
+2:learner able to register for only 1 course or edit it <done>
+3: Able to submit answer for an assignment
+
+
+
+
+Instructors:
+1:Able to register as an instructor <done>
+2:Able to register the course they will be teaching as much as possible <done>
+3:Able to create, edit and delete a course, module and content of their own track <done>
+4:Able to post Post annonuncement
+
+
+Admin:
+1:Able to create, delete, view all users
+2:Able to create course, delete and update
+3:Able to Post annonuncement
+4:
