@@ -1,38 +1,15 @@
 from django.shortcuts import render
 from rest_framework import generics
 from commonapps.models import Module
-from .serializers import *
 
-# Create your views here.
 
-class InstrcutorSignUpView(generics.CreateAPIView):
+#list all the contents in the instructors's registered course modules
+# @api_view(['GET'])
+# def I_courseModulesContents(request, slug):
+# 	my_modules=Module.objects.get(slug=slug)
+# 	if request.user in my_modules.course.enrolled_users.all()
+# 		content=my_modules.content_set.all()
+# 		serializer=ContentSerializer(content, many=True)
+# 		return Response(serializer.data)
+# 	return Response('error !! you did not register for this course')
 
-	serializer_class=InstructorSerializer
-
-class InstrcutorCourse(generics.CreateAPIView):
-
-	serializer_class=InstructorIntrest
-
-class ICourseModuleView(generics.ListCreateAPIView):
-	queryset=Module.objects.all()
-	serializer_class=ICourseModule
-
-class ICourseModuleeditView(generics.RetrieveUpdateAPIView):
-	queryset=Module.objects.all()
-	serializer_class=ICourseModule	
-
-class ICourseModuledeleteView(generics.RetrieveDestroyAPIView):
-	queryset=Module.objects.all()
-	serializer_class=ICourseModule
-
-class IGradingView(generics.ListCreateAPIView):
-	queryset=LearnerScores.objects.all()
-	serializer_class=IGrading
-
-class IEditGradingView(generics.RetrieveUpdateAPIView):
-	queryset=LearnerScores.objects.all()
-	serializer_class=IGrading
-
-class IDeleteGradingView(generics.RetrieveDestroyAPIView):
-	queryset=LearnerScores.objects.all()
-	serializer_class=IGrading	

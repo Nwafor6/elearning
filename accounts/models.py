@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.template.defaultfilters import slugify
 from django.conf import settings
 from .managers import CustomUserManager
-from commonapps.models import Cohort, Course
+from commonapps.models import Track, Course
 from . import utils
 
 # Create your models here.
@@ -18,8 +18,10 @@ class CustomUser(AbstractUser):
 	is_learner=models.BooleanField(default=False)
 	is_instructor=models.BooleanField(default=False)
 	is_admin = models.BooleanField(default=False)
-	slug=models.SlugField(blank=True, unique=True)
-	cohort=models.ForeignKey(Cohort, on_delete=models.SET_NULL, blank=True, null=True)
+	slug=models.SlugField(blank=True, unique=True, null=True)
+	interest=models.ManyToManyField(Course,null=True, blank=True)
+	started_on=models.DateTimeField(auto_now_add=False, auto_now=False, null=True, blank=True)
+	joined=models.DateTimeField(auto_now_add=True)
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS=['first_name', 'last_name']
 

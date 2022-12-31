@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+  	<div class="container">
+    	<h1 class="bg-warning">Advocates</h1>
+    	<div class="row">
+    		
+    	</div>
+	</div>
+
+
+
+    <script>
+    	const row= document.querySelector('.row')
+    	$.ajax({
+    		type:'GET',
+    		url:"https://cados.up.railway.app/advocates",
+    		success:function(response){
+    			console.log(response)
+    			console.log(response.advocates)
+    			for (const i in response.advocates ){
+    				console.log(response.advocates[i].profile_pic,'looping');
+    				row.innerHTML +=`
+
+
+    				<div class ="col-lg-4 col-md-6 col-sm-12">
+
+    					<div class="card" style="width: 18rem;">
+							  <img src="${response.advocates[i].profile_pic}" class="card-img-top" alt="...">
+							  <div class="card-body">
+							    <h5 class="card-title">Nmae: ${response.advocates[i].name}</h5>
+							    <p class="card-text">Bio: ${response.advocates[i].bio}</p>
+							  </div>
+							  <ul class="list-group list-group-flush">
+							    <li class="list-group-item">Twiiter: ${response.advocates[i].twitter}</li>
+							    <li class="list-group-item">Username: ${response.advocates[i].username}</li>
+							    <li class="list-group-item">A third ${response.advocates[i].id}</li>
+							  </ul>
+							  <div class="card-body">
+							    <a href="#" class="card-link">Card link</a>
+							    <a href="#" class="card-link">Another link</a>
+							  </div>
+							</div>
+
+    				</div
+
+
+
+    				`
+    			}
+    			console.log(typeof response.advocates)
+
+    		},
+    		error:function(err){
+    			console.log(err)
+    		}
+    	})
+    </script>
+  </body>
+</html>

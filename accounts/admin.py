@@ -4,10 +4,8 @@ from .models import CustomUser
 from django.contrib.auth.admin import UserAdmin
 from . import models 
 from . import forms 
-from commonapps.models import Cohort
 # Register your models here.
 
-admin.site.register(Cohort)
 @admin.register(models.CustomUser)
 class CustomUserAdmin(UserAdmin):
     add_form = forms.CustomUserCreationForm
@@ -15,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     model = models.CustomUser
 
     ordering = ["email"]
-    list_display = ["email","first_name","last_name",'cohort',"is_staff", "is_active","is_superuser",]
+    list_display = ["email","first_name","last_name","is_staff", "is_active","is_superuser",]
     search_fields = ["email"]
     
     fieldsets = (
@@ -26,7 +24,7 @@ class CustomUserAdmin(UserAdmin):
         }),
         ('Details', {
             "fields": (
-                'first_name', 'last_name', 'cohort','slug','is_admin', 'is_instructor', 'is_learner'
+                'first_name', 'last_name', 'slug','is_admin', 'is_instructor', 'is_learner','interest',
             ),
         }),
         ('Permissions', {
@@ -38,7 +36,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
     (None, {
         'classes': ('wide',),
-        'fields': ('email', 'first_name', 'last_name', 'password1', 'password2','cohort','is_admin', 'is_instructor', 'is_learner'),
+        'fields': ('email', 'first_name', 'last_name', 'password1', 'password2','interest','is_admin', 'is_instructor', 'is_learner'),
     }),
 )
 
