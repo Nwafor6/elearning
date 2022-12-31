@@ -27,7 +27,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY', default='django-insecure-3*@aor+=2#)tc0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost","https://onlinelearn.pythonanywhere.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost","onlinelearn.pythonanywhere.com"]
 
 CSRF_COOKIE_SECURE=False
 SESSION_COOKIE_SECURE=False
