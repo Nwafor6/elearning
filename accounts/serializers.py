@@ -14,9 +14,9 @@ class TrackSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True)
 	class Meta:
-		fields=['email', 'first_name', 'last_name','password', 'interest','slug','started_on','joined',]
+		fields=['email', 'first_name', 'last_name', 'interest','slug','started_on','joined',]
 		model=CustomUser
-		extra_kwargs={'slug':{'read_only':True},'email':{'read_only':True},'password':{'write_only':True},'started_on':{'read_only':True},'joined':{'read_only':True},}
+		extra_kwargs={'slug':{'read_only':True},'email':{'read_only':True},'started_on':{'read_only':True},'joined':{'read_only':True},}
 
 	def create(self, validated_data):
 		_user=self.context['request'].user
@@ -64,9 +64,9 @@ class UserSerializer(serializers.ModelSerializer):
 class StaffsignupSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True)
 	class Meta:
-		fields=['email', 'first_name', 'last_name','slug','is_instructor','password', 'interest','joined','is_instructor']
+		fields=['email', 'first_name', 'last_name','slug','is_instructor', 'interest','joined','is_instructor']
 		model=CustomUser
-		extra_kwargs={'is_instructor':{'read_only':True},'password':{'write_only':True},'joined':{'read_only':True},'slug':{'read_only':True},'email':{'write_only':True}}
+		extra_kwargs={'is_instructor':{'read_only':True},'joined':{'read_only':True},'slug':{'read_only':True},'email':{'write_only':True}}
 
 	def create(self, validated_data):
 		interest=validated_data.pop('interest', None)
