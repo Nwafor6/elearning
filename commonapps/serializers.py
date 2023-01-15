@@ -1,6 +1,8 @@
 from rest_framework import serializers 
 from .models import Announcement, Track, Course, Content, Module,Answers, LearnerScores
-
+from accounts.models import CustomUser 
+from api.serializers import ModifiedUserSerializer,ModifiedStaffsignupSerializer
+# from accounts import serializers 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -14,19 +16,17 @@ class TrackSerializers(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-
+	track=TrackSerializers(many=False,)
+	tutor=ModifiedStaffsignupSerializer(many=False, required=False)
+	enrolled_users=ModifiedUserSerializer(many=True, required=False)
 	class Meta:
 		model=Course
 		fields=['id','tutor','track','title','description','course_img','total_point','slug','enrolled_users']
 		extra_kwargs={'id':{'read_only':True},'slug':{'read_only':True},'created':{'read_only':True}}
-# class CourseSerializer(serializers.ModelSerializer):
 
-# 	class Meta:
-# 		model=Course
-# 		fields=['course','title','body','point','slug']
 
 class ModuleSerializer(serializers.ModelSerializer):
-
+	# course=CourseSerializer(many=False)
 	class Meta:
 		model=Module
 		fields=['id','course','title','body','point','slug','posted']

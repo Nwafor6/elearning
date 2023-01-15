@@ -25,14 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='django-insecure-3*@aor+=2#)tc0c^rr&r%ky&r96+$a#3i210-g7-qe0*s%d*8!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
+DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost","onlinelearn.pythonanywhere.com"]
 
-CSRF_COOKIE_SECURE=False
-SESSION_COOKIE_SECURE=False
-SECURE_SSL_REDIRECT=False
-SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+# CSRF_COOKIE_SECURE=False
+# SESSION_COOKIE_SECURE=False
+# SECURE_SSL_REDIRECT=False
+# SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 
 CORS_ORIGIN_ALLOW_ALL=True
 
@@ -87,11 +87,11 @@ INSTALLED_APPS = [
 #         'rest_framework.authentication.SessionAuthentication', 
 #     ) 
 # }
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     )
+# }
 
 
 

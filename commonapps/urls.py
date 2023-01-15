@@ -10,7 +10,7 @@ schema_view = get_schema_view(
       title="LMS dOC",
       default_version='v1',
       description="Endpoints description",
-      terms_of_service="https://www.google.com/policies/terms/",
+      terms_of_service="https://www.scholarsjoint.com.ng",
       contact=openapi.Contact(email="nwaforglory6@gmailcom"),
       license=openapi.License(name="BSD License"),
    ),

@@ -1,85 +1,76 @@
-# from rest_framework import serializers 
-# from accounts.models import CustomUser
-# from commonapps.models import Cohort, Track, Course, Module, Answers, LearnerScores, Learner, Announcement
+from rest_framework import serializers 
+from accounts.models import CustomUser
+
+class ModifiedUserSerializer(serializers.ModelSerializer):
+	class Meta:
+		fields=['email', 'first_name', 'last_name', 'password','interest','slug','started_on','joined',]
+		model=CustomUser
+		extra_kwargs={'slug':{'read_only':True},'started_on':{'read_only':True},'joined':{'read_only':True},'password':{'write_only':True},}
+
+	def create(self, validated_data):
+		_user=self.context['request'].user
+		interest=validated_data.pop('interest', None)
+		user=CustomUser(
+			email=validated_data['email'],
+			first_name=validated_data['first_name'],
+			last_name=validated_data['last_name'],
+			is_learner=True,
+
+			)
+		user.set_password(validated_data['password'])
+
+		user.save()
+		if interest:
+			for single_intrest in interest:
+				user.interest.add(single_intrest.id)
+				course=Course.objects.get(id=single_intrest.id)
+				course.enrolled_users.add(_user.id)
+				course.save()
+		user.save()
+
+		return user
+
+	def update(self, instance, validated_data):#instance here is the single user being queried
+		_user=self.context['request'].user
+		instance.first_name = validated_data.get('first_name', instance.first_name)
+		instance.last_name = validated_data.get('last_name', instance.last_name)
+		interest=instance.interest.all()#get all the previous courses user has taken registered
+		_interest=validated_data.get('interest')
+
+		for course in interest:#loop and remove the initial courses so as to remove the course the user has unclicked
+			instance.interest.remove(course.id)
+			course=Course.objects.get(id=course.id)#get the id of each courses and add the user to the enrolled_users
+			course.enrolled_users.remove(_user.id)
+
+		for _course in _interest:#loop through the new picked interested courses and add it to the intrested field
+			instance.interest.add(_course.id)
+			course=Course.objects.get(id=_course.id)#get the id of each courses and add the user to the enrolled_users
+			course.enrolled_users.add(_user.id)
+			course.save()
+		return instance #return the user instance
 
 
-# class UserSerializer(serializers.ModelSerializer):
+class ModifiedStaffsignupSerializer(serializers.ModelSerializer):
+	class Meta:
+		fields=['email', 'first_name', 'last_name',"password",'slug','is_instructor', 'interest','joined','is_instructor']
+		model=CustomUser
+		extra_kwargs={'is_instructor':{'read_only':True},'joined':{'read_only':True},'slug':{'read_only':True},'email':{'write_only':True},'password':{'write_only':True},}
 
-# 	class Meta:
-# 		fields=['email', 'first_name', 'last_name','password', ]
-# 		model=CustomUser
-# 		extra_kwargs={'password':{'write_only':True}}
+	def create(self, validated_data):
+		interest=validated_data.pop('interest', None)
+		user=CustomUser(
+			email=validated_data['email'],
+			first_name=validated_data['first_name'],
+			last_name=validated_data['last_name'],
+			is_instructor=True,
+			# is_staff=True
 
-# 	def create(self, validate_data):
-# 		user=CustomUser(
-# 			email=validate_data['email'],
-# 			first_name=validate_data['first_name'],
-# 			last_name=validate_data['last_name'],
-# 			is_admin=True,
-# 			is_superuser=True,
-# 			is_staff=True
-# 			)
-# 		user.set_password(validate_data['password'])
+			)
+		user.set_password(validated_data['password'])
 
-# 		user.save()
-# 		return user
-
-# class CohortSerializer(serializers.ModelSerializer):
-
-# 	class Meta:
-# 		fields='__all__'
-# 		model=Cohort
-
-# class TrackSerializer(serializers.ModelSerializer):
-
-# 	class Meta:
-# 		fields='__all__'
-# 		model=Track
-
-# class CourseSerializer(serializers.ModelSerializer):
-	
-# 	class Meta:
-# 		fields=['track','title','description','course_img','total_point',]
-# 		model=Course
-
-# 	def create(self, validate_data):
-# 		course=Course.objects.create(
-# 			cohort=Cohort.objects.latest('id'),
-# 			tutor=self.context['request'].user,
-# 			title=validate_data['title'],
-# 			description=validate_data['description'],
-# 			track=validate_data['track'],
-# 			course_img=validate_data['course_img'],
-# 			total_point=validate_data['total_point']
-# 			)
-# 		return course
-
-
-
-# class LearnerScoresSerializer(serializers.ModelSerializer):
-
-# 	class Meta:
-# 		fields='__all__'
-# 		model=LearnerScores
-
-# class LearnerSerializer(serializers.ModelSerializer):
-
-# 	class Meta:
-# 		fields='__all__'
-# 		model=Learner
-
-# # General announcement posting
-# class AnnouncementSerializers(serializers.ModelSerializer):
-# 	class Meta:
-# 		model=Announcement
-# 		fields=['title', ]
-
-# 	def create(self, validate_data):
-# 		user=self.context['request'].user
-# 		post=Announcement.objects.create(
-
-# 			Poster=user,
-# 			title=validate_data['title']
-# 			)
-
-# 		return post
+		user.save()
+		if interest:
+			for single_intrest in interest:
+				user.interest.add(single_intrest.id)
+		user.save()
+		return user
