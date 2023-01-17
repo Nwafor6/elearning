@@ -9,17 +9,23 @@ schema_view = get_schema_view(
    openapi.Info(
       title="LMS dOC",
       default_version='v1',
-      description=
-      '''<h1>Welcome to Scholarsjoint LMS endpoint Doc:</h1>
-      <h1>Quick Description</h1>\n
-
-      <p>1: To <strong style="color:red";>login</strong> a user, send a post request to the 'authentication endpoint' with "email","password"</p>\n
-      <p>2: To <strong style="color:red";>logout</strong> a user, send a get request to the 'authentication endpoint as well'. No data is requested to logout a user.</p>>    
-      
-      ''',
       terms_of_service="https://www.scholarsjoint.com.ng",
       contact=openapi.Contact(email="nwaforglory6@gmailcom"),
       license=openapi.License(name="BSD License"),
+      description=
+      '''<h1>Welcome to Scholarsjoint LMS endpoint Doc:</h1>
+      <h1>Quick Description</h1>
+
+      1: To login a user, send a post request to the 'authentication endpoint' with  the following data "email","password"
+      2: To logout a user, send a get request to the 'authentication endpoint as well'. No data is required to logout a user.    
+      3: When you register a user, a token and uidb64 value is ent to the users email. The uid is the an harshed value of the "users id". 
+      The route "activate/uid/token" endpoint takes in these two values and activate the users account. 
+      4: To update a users profile, make a request to the "profile/update" endpoint. This end point supports "put, patch, delete" methods
+      5:To change users password, send a request with the users email to the "requesttoken/" endpoint, the if the user's
+      account is activated and the user exist, a token with th users id harsed as a uuid is sent to the user. With this token,
+      This token and Uid has to be sent to the "changepassword/<uidb64>/<token>/" endpoint along side the users new passoword.With  this all set, the users previous
+      password will over written. 
+      '''
    ),
    public=True,
    permission_classes=[permissions.AllowAny],

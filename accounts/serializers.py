@@ -62,7 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
 			udi:{uid}, token:{token}
 		
 		'''
-		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',["nwaforglory6@gmail.com"])
+		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
 		msg.send()
 		# End mail sending
 
@@ -162,7 +162,7 @@ class StaffsignupSerializer(serializers.ModelSerializer):
 			udi:{uid}, token:{token}
 		
 		'''
-		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',["nwaforglory6@gmail.com"])
+		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
 		msg.send()
 		# End mail sending
 
@@ -183,7 +183,13 @@ class UpdateStaffsignupSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
+	email=serializers.EmailField(required=False)
+	password=serializers.CharField(max_length=100, required=False)
+
+class RequestPasswordTokenSerializer(serializers.Serializer):
 	email=serializers.EmailField()
-	password=serializers.CharField(max_length=100)
+
+class NewPasswordSerializer(serializers.Serializer):
+	new_password=serializers.CharField(max_length=100)
 
 

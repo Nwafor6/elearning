@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics,viewsets
 from rest_framework.decorators import api_view
-from .serializers import UserSerializer, StaffsignupSerializer , UpdateUserSerializer ,UpdateStaffsignupSerializer ,LoginSerializer
+from .serializers import UserSerializer, StaffsignupSerializer , RequestPasswordTokenSerializer,NewPasswordSerializer,UpdateUserSerializer ,UpdateStaffsignupSerializer ,LoginSerializer
 from commonapps.views import MultipleFieldLookupMixin
 from .models import CustomUser
 from rest_framework.response import Response
@@ -103,6 +103,50 @@ class LoginLogoutView(generics.CreateAPIView):
 		else:
 			return Response("User does not exits or invalid credentials")
 
+class SendUserPasswordToken(generics.CreateAPIView):
+	serializer_class=RequestPasswordTokenSerializer
 
+	def post(self, request, *args, **kwargs):
+		email=request.POST['email']
+		try:
+
+			user=CustomUser.objects.get(email=email)
+		except:
+			return Response("User with this email does not exist !")
+		if user.is_active:
+			uid=urlsafe_base64_encode(force_bytes(user.pk))
+			token=account_activation_token.make_token(user)
+			subject="Passoword Reset Email"
+			message=f'''
+			This is for testing mode. Copy the uid which is an harshed id of the user and  
+			also, copy the token. send the  token and uid to the activate account route to activate the user's account 
+			udi:{uid}, token:{token}
+		
+			'''
+			msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[email])
+			msg.send()
+			return Response(("Reset link sent check your mail"))
+			
+		else:
+			return Response("Your account is not activated yet so you cannot change your poassword")
+
+class ChangeUserPassword(generics.CreateAPIView):
+	serializer_class=NewPasswordSerializer
+
+	def post(self,request, *args, **kwargs):
+		uidb64=self.kwargs["uidb64"]
+		token=self.kwargs["token"]
+		new_password= request.POST["new_password"]
+
+		try:
+			uid=force_text(urlsafe_base64_decode(uidb64))
+			user=CustomUser.objects.get(pk=uid)
+		except(TypeError, ValueError, OverflowError):
+			user=None
+		if user is not None and account_activation_token.check_token(user, token):
+			user.set_password(new_password)
+			user.save()
+			return Response("Passowrd change successfully")
+		return Response("Unable to chnage password due to incorrect token")	
 
 
