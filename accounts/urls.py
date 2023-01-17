@@ -13,7 +13,7 @@ urlpatterns=[
 	# path('myprofile/update/<slug:slug>/', views.UpdateRegistraion.as_view()),
 	path('registration/staff/', views.StaffRegistraion.as_view()),
 	path("activate/<uidb64>/<token>/", views.AcivateAccountView),
-	path("authentication/", views.LoginLogoutView.as_view()),
+	path("login-logout/", views.LoginLogoutView.as_view()),
 	path("requesttoken/", views.SendUserPasswordToken.as_view()),
 	path("changepassword/<uidb64>/<token>/", views.ChangeUserPassword.as_view())
 
