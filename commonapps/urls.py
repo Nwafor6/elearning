@@ -9,7 +9,14 @@ schema_view = get_schema_view(
    openapi.Info(
       title="LMS dOC",
       default_version='v1',
-      description="Endpoints description",
+      description=
+      '''<h1>Welcome to Scholarsjoint LMS endpoint Doc:</h1>
+      <h1>Quick Description</h1>\n
+
+      <p>1: To <strong style="color:red";>login</strong> a user, send a post request to the 'authentication endpoint' with "email","password"</p>\n
+      <p>2: To <strong style="color:red";>logout</strong> a user, send a get request to the 'authentication endpoint as well'. No data is requested to logout a user.</p>>    
+      
+      ''',
       terms_of_service="https://www.scholarsjoint.com.ng",
       contact=openapi.Contact(email="nwaforglory6@gmailcom"),
       license=openapi.License(name="BSD License"),
