@@ -158,17 +158,16 @@ class ContactTeamView(generics.CreateAPIView):
 		if serializer.is_valid():
 			name=serializer.data["name"]
 			email=serializer.data["email"]
-			track=serializer.data["track"]
+			# track=serializer.data["track"]
 			subject=serializer.data["subject"]
 			message=serializer.data["message"]
-			if track:
-				message=f"""
-					Track:{track},
-					{message}
-				"""
-			else:
-				message=message
-			print(message,"jhggy")
+			# if track:
+			# 	message=f"""
+			# 		Track:{track},
+			# 		{message}
+			# 	"""
+			# else:
+			# 	message=message
 			msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[email])
 			msg.send()
 			return Response(serializer.data)
