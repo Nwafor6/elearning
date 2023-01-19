@@ -15,7 +15,7 @@ urlpatterns=[
 	path("activate/<uidb64>/<token>/", views.AcivateAccountView),
 	path("login-logout/", views.LoginLogoutView.as_view()),
 	path("requesttoken/", views.SendUserPasswordToken.as_view()),
-	path("changepassword/<uidb64>/<token>/", views.ChangeUserPassword.as_view())
-
+	path("changepassword/<uidb64>/<token>/", views.ChangeUserPassword.as_view()),
+	path("contactteam/", views.ContactTeamView.as_view())
 ]+router.urls
 

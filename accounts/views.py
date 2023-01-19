@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics,viewsets
 from rest_framework.decorators import api_view
-from .serializers import UserSerializer, StaffsignupSerializer , RequestPasswordTokenSerializer,NewPasswordSerializer,UpdateUserSerializer ,UpdateStaffsignupSerializer ,LoginSerializer
+from .serializers import UserSerializer,ContactTeamSerializer, StaffsignupSerializer , RequestPasswordTokenSerializer,NewPasswordSerializer,UpdateUserSerializer ,UpdateStaffsignupSerializer ,LoginSerializer
 from commonapps.views import MultipleFieldLookupMixin
 from .models import CustomUser
 from rest_framework.response import Response
@@ -150,3 +150,26 @@ class ChangeUserPassword(generics.CreateAPIView):
 		return Response("Unable to chnage password due to incorrect token")	
 
 
+class ContactTeamView(generics.CreateAPIView):
+	serializer_class=ContactTeamSerializer
+
+	def post(self, request, *args, **kwargs):
+		serializer= self.serializer_class(data=request.data)
+		if serializer.is_valid():
+			name=serializer.data["name"]
+			email=serializer.data["email"]
+			track=serializer.data["track"]
+			subject=serializer.data["subject"]
+			message=serializer.data["message"]
+			if track:
+				message=f"""
+					Track:{track},
+					{message}
+				"""
+			else:
+				message=message
+			print(message,"jhggy")
+			msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[email])
+			msg.send()
+			return Response(serializer.data)
+		return Response("Error ! Make sure your email is valid.")

@@ -193,3 +193,11 @@ class NewPasswordSerializer(serializers.Serializer):
 	new_password=serializers.CharField(max_length=100)
 
 
+class ContactTeamSerializer(serializers.Serializer):
+	name=serializers.CharField(max_length=100, required=True)
+	track=serializers.CharField(max_length=100,required=False)
+	email=serializers.EmailField(required=True)
+	subject=serializers.CharField(max_length=100, required=True)
+	message=serializers.CharField(max_length=500, required=True)
+
+
