@@ -15,6 +15,10 @@ from django.core.mail import send_mail, BadHeaderError
 from django.core.mail import EmailMultiAlternatives
 # end
 
+# # import for jwt customisation
+# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+# from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 class TrackSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -200,4 +204,17 @@ class ContactTeamSerializer(serializers.Serializer):
 	subject=serializers.CharField(max_length=100, required=True)
 	message=serializers.CharField(max_length=500, required=True)
 
+# # custom serializer for simplejwt
+# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+# 	@classmethod
+# 	def get_token(cls, user):
+# 		token=super().get_token(user)
+# 		token['first_name']=user.first_name
+# 		token['last_name']=user.last_name
+# 		token['email']=user.email
+# 		print("hello")
+
+# 		return token
+
+	
 

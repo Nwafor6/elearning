@@ -61,7 +61,7 @@ class DestoryAnnouncement(generics.DestroyAPIView):
 	def delete(self, request, *args, **kwargs):
 		self.object = self.get_object()
 		self.object.delete()
-		return Response('success')
+		return Response({"success":'success'})
 
 class CreateListTrack(generics.ListCreateAPIView):
 	queryset=Track.objects.all()
@@ -129,7 +129,7 @@ def my_courseModules(request, slug):
 		modules=my_learning.module_set.all()
 		serializer=ModuleSerializer(modules, many=True)
 		return Response(serializer.data)
-	return Response('error !! you did not register for this course')
+	return Response({"error":'error !! you did not register for this course'})
 
 #list all the contents in the student's registered course modules
 @api_view(['GET'])
@@ -139,7 +139,7 @@ def my_courseModulesContents(request, slug):
 		content=my_modules.content_set.all()
 		serializer=ContentSerializer(content, many=True)
 		return Response(serializer.data)
-	return Response('error !! you did not register for this course')
+	return Response({"error":'error !! you did not register for this course'})
 
 
 #Allow user click from a list of course after registration and add it to their course interest.
@@ -151,18 +151,18 @@ def AddToMyCourses(request):
 		try:
 			slug=request.data['slug']
 		except:
-			return Response('slug error!. slug must be in json format')
+			return Response({"error":'slug error!. slug must be in json format'})
 		course=Course.objects.get(slug=slug)
 		print(slug)
 		if request.user in course.enrolled_users.all():#check if the user has this course and uneroll the person.
 			course.enrolled_users.remove(_User)
 			_User.interest.remove(course.id)
-			return Response("You have already unenrolled for this course")
+			return Response({"response":"You have already unenrolled for this course"})
 		# If they dont have this course, add course to interest and addd them to the erolled user of the course
 		course.enrolled_users.add(_User)
 		_User.interest.add(course.id)
 		_User.save()
-		return Response("Course added successfully !")
+		return Response({"success":"Course added successfully !"})
 	allcourses=Course.objects.all()
 	serializer=CourseSerializer(allcourses, many=True)
 	return Response (serializer.data)
@@ -205,7 +205,7 @@ class DeleteCourseModule(MultipleFieldLookupMixin,generics.DestroyAPIView):
 	def delete(self, request, *args, **kwargs):
 		self.object = self.get_object()
 		self.object.delete()
-		return Response('Module deleted successfully !')
+		return Response({"success":'Module deleted successfully !'})
 
 
 class CreateModuleContent(generics.ListCreateAPIView):
@@ -229,7 +229,7 @@ class DeleteModuleContent(MultipleFieldLookupMixin,generics.DestroyAPIView):
 	def delete(self, request, *args, **kwargs):
 		self.object = self.get_object()
 		self.object.delete()
-		return Response("Module's content deleted successfully !")
+		return Response({"detail":"Module's content deleted successfully !"})
 
 
 class PostContentAnswer(generics.ListCreateAPIView):
@@ -250,10 +250,10 @@ class PostContentAnswer(generics.ListCreateAPIView):
 				my_answer=Answers.objects.create(content=content, url=url, learner=learner)
 				LearnerScores.objects.create(answers=my_answer, learner=learner)
 			except:
-				return Response('Error you cannot submit more than once') 
+				return Response({"error":'Error you cannot submit more than once'}) 
 			serializer=self.serializer_class(my_answer)
 			return Response(serializer.data)
-		return Response('Error ! You do not have this course as your registered course')
+		return Response({"error":'Error ! You do not have this course as your registered course'})
 
 
 class GradeLearnersViews(MultipleFieldLookupMixin, generics.ListCreateAPIView):
@@ -268,7 +268,7 @@ class GradeLearnersViews(MultipleFieldLookupMixin, generics.ListCreateAPIView):
 		try:
 			grade=LearnerScores.objects.create(answers=answer, learner=learner, score=score)
 		except:
-			return Response('student cannot be gradded twice ')
+			return Response({"error":'student cannot be gradded twice '})
 
 		serializer=self.serializer_class(grade, many=True)
 		return Response(serializer.data)
