@@ -89,17 +89,18 @@ class LoginLogoutView(generics.CreateAPIView):
 		return Response("Logout successful !")
 
 	def post(self, request, *args, **kwargs):
-		email=request.POST["email"]
-		password=request.POST["password"]
+		email=request.data["email"]
+		password=request.data["password"]
 
 		try: 
 			user=CustomUser.objects.get(email=email)
+			serializer=UserSerializer(user, many=False)
 		except:
 			return Response("User does not exist")
 		user= authenticate(request, email=email, password=password)
 		if user is not None:
 			login(request, user)
-			return Response("Login Successful")
+			return Response(serializer.data)
 		else:
 			return Response("User does not exits or invalid credentials")
 
