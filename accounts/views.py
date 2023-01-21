@@ -172,6 +172,6 @@ class ContactTeamView(generics.CreateAPIView):
 			message=serializer.data["message"]
 			msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[email])
 			msg.send()
-			return Response({"success":Message sent !!})
+			return Response({"success":"Message sent !!"})
 		return Response({"error":"Error ! Make sure your email is valid."},status=status.HTTP_400_BAD_REQUEST)
 
