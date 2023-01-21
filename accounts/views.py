@@ -16,6 +16,7 @@ from django.contrib.messages import get_messages
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
 
 # IMPORT EXTRA IMPORT TO SEND USERS MAIL TO ACTIVATE THEIR ACCOUNTS
 from django.contrib.sites.shortcuts import get_current_site  
@@ -83,7 +84,7 @@ def AcivateAccountView(request, uidb64, token):
 		user.is_active = True  
 		user.save()
 		return Response({"success":"Account Activated !!!"}) 
-	return Response({"error":"Activation link not valid or has expired !!"})
+	return Response({"error":"Activation link not valid or has expired !!"},status=status.HTTP_400_BAD_REQUEST)
 
 
 # Login and logout authentications
@@ -103,13 +104,13 @@ class LoginLogoutView(generics.CreateAPIView):
 			serializer=UserSerializer(user, many=False)
 			token=RefreshToken.for_user(user)
 		except:
-			return Response({"error":"User does not exist"})
+			return Response({"error":"User does not exist"}, status=status.HTTP_404_NOT_FOUND)
 		user= authenticate(request, email=email, password=password)
 		if user is not None:
 			login(request, user)
-			return Response({"user_data":serializer.data, "access_token":str(token.access_token),})
+			return Response({"user_data":serializer.data, "access_token":str(token.access_token),}, status=status.HTTP_200_OK)
 		else:
-			return Response({"error":"User does not exits or invalid credentials"})
+			return Response({"error":"User does not exits or invalid credentials"},status=status.HTTP_403_FORBIDDEN)
 
 class SendUserPasswordToken(generics.CreateAPIView):
 	serializer_class=RequestPasswordTokenSerializer
@@ -120,7 +121,7 @@ class SendUserPasswordToken(generics.CreateAPIView):
 
 			user=CustomUser.objects.get(email=email)
 		except:
-			return Response({"error":"User with this email does not exist !"})
+			return Response({"error":"User with this email does not exist !"},status=status.HTTP_404_NOT_FOUND)
 		if user.is_active:
 			uid=urlsafe_base64_encode(force_bytes(user.pk))
 			token=account_activation_token.make_token(user)
@@ -136,7 +137,7 @@ class SendUserPasswordToken(generics.CreateAPIView):
 			return Response({"success":"Reset link sent check your mail"})
 			
 		else:
-			return Response({"error":"Your account is not activated yet so you cannot change your poassword"})
+			return Response({"error":"Your account is not activated yet so you cannot change your poassword"},status=status.HTTP_403_FORBIDDEN)
 
 class ChangeUserPassword(generics.CreateAPIView):
 	serializer_class=NewPasswordSerializer
@@ -155,7 +156,7 @@ class ChangeUserPassword(generics.CreateAPIView):
 			user.set_password(new_password)
 			user.save()
 			return Response({"success":"Passowrd change successfully"})
-		return Response({"error":"Unable to chnage password due to incorrect token"})	
+		return Response({"error":"Unable to chnage password due to incorrect token"},status=status.HTTP_403_FORBIDDEN)	
 
 
 class ContactTeamView(generics.CreateAPIView):
@@ -169,18 +170,8 @@ class ContactTeamView(generics.CreateAPIView):
 			# track=serializer.data["track"]
 			subject=serializer.data["subject"]
 			message=serializer.data["message"]
-			# if track:
-			# 	message=f"""
-			# 		Track:{track},
-			# 		{message}
-			# 	"""
-			# else:
-			# 	message=message
 			msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[email])
 			msg.send()
 			return Response(serializer.data)
-		return Response({"error":"Error ! Make sure your email is valid."})
+		return Response({"error":"Error ! Make sure your email is valid."},status=status.HTTP_400_BAD_REQUEST)
 
-# # custom simeple jwt 
-# class MyTokenObtainPairView(TokenObtainPairView):
-# 	serializer_class =MyTokenObtainPairSerializer

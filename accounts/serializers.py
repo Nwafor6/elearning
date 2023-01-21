@@ -94,44 +94,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 		model=CustomUser
 		extra_kwargs={'slug':{'read_only':True},'started_on':{'read_only':True},'joined':{'read_only':True}}
 
-	# def update(self, instance, validated_data):#instance here is the single user being queried
-	# 	_user=self.context['request'].user
-	# 	instance.first_name = validated_data.get('first_name', instance.first_name)
-	# 	instance.last_name = validated_data.get('last_name', instance.last_name)
-	# 	interest=instance.interest.all()#get all the previous courses user has taken registered
-	# 	_interest=validated_data.get('interest')
-
-	# 	user=CustomUser(
-	# 		# email=validated_data['email'],
-	# 		first_name=validated_data['first_name'],
-	# 		last_name=validated_data['last_name'],
-	# 		paid=validated_data['paid'],
-	# 		phone_numuber=validated_data['phone_numuber'],
-	# 		gender=validated_data['gender'],
-	# 		github_repo=validated_data['github_repo'],
-	# 		linkedln_profile=validated_data['linkedln_profile'],
-	# 		twitter_profile=validated_data['twitter_profile'],
-	# 		# is_learner=True,
-	# 		# is_active=False
-
-	# 		)
-
-	# 	if interest:
-
-	# 		for course in interest:#loop and remove the initial courses so as to remove the course the user has unclicked
-	# 			instance.interest.remove(course.id)
-	# 			course=Course.objects.get(id=course.id)#get the id of each courses and add the user to the enrolled_users
-	# 			course.enrolled_users.remove(_user.id)
-
-	# 		for _course in _interest:#loop through the new picked interested courses and add it to the intrested field
-	# 			instance.interest.add(_course.id)
-	# 			course=Course.objects.get(id=_course.id)#get the id of each courses and add the user to the enrolled_users
-	# 			course.enrolled_users.add(_user.id)
-	# 			course.save()
-	# 	user.save()
-	# 	return instance #return the user instance
-
-
 
 class StaffsignupSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True, required=False)
@@ -204,17 +166,6 @@ class ContactTeamSerializer(serializers.Serializer):
 	subject=serializers.CharField(max_length=100, required=True)
 	message=serializers.CharField(max_length=500, required=True)
 
-# # custom serializer for simplejwt
-# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-# 	@classmethod
-# 	def get_token(cls, user):
-# 		token=super().get_token(user)
-# 		token['first_name']=user.first_name
-# 		token['last_name']=user.last_name
-# 		token['email']=user.email
-# 		print("hello")
-
-# 		return token
 
 	
 
