@@ -110,7 +110,7 @@ class LoginLogoutView(generics.CreateAPIView):
 			login(request, user)
 			return Response({"user_data":serializer.data, "access_token":str(token.access_token),}, status=status.HTTP_200_OK)
 		else:
-			return Response({"error":"User does not exits or invalid credentials"},status=status.HTTP_403_FORBIDDEN)
+			return Response({"error":"invalid credentials"},status=status.HTTP_403_FORBIDDEN)
 
 class SendUserPasswordToken(generics.CreateAPIView):
 	serializer_class=RequestPasswordTokenSerializer
