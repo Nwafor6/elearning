@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics,viewsets
 from rest_framework.decorators import api_view
-from .serializers import UserSerializer,ContactTeamSerializer, StaffsignupSerializer , RequestPasswordTokenSerializer,NewPasswordSerializer,UpdateUserSerializer ,UpdateStaffsignupSerializer ,LoginSerializer
+from .serializers import UserSerializer,ContactTeamSerializer, UpdateStduentPaidStatusSerializer,StaffsignupSerializer , RequestPasswordTokenSerializer,NewPasswordSerializer,UpdateUserSerializer ,UpdateStaffsignupSerializer ,LoginSerializer
 from commonapps.views import MultipleFieldLookupMixin
 from .models import CustomUser
 from rest_framework.response import Response
@@ -28,6 +28,8 @@ from django.core.mail import EmailMessage
 from django.core.mail import send_mail, BadHeaderError
 from django.core.mail import EmailMultiAlternatives
 # end
+# Import my custom permissions
+from .permissions import IsStaffOnly
 
 # Create your views here.
 
@@ -174,4 +176,20 @@ class ContactTeamView(generics.CreateAPIView):
 			msg.send()
 			return Response({"success":"Message sent !!"})
 		return Response({"error":"Error ! Make sure your email is valid."},status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateStudentPaidStatus(generics.RetrieveUpdateAPIView):
+	queryset=CustomUser.objects.all()
+	serializer_class=UpdateStduentPaidStatusSerializer
+	permission_classes=[IsStaffOnly, IsAuthenticated]
+	lookup_field = 'slug'
+
+	def patch(self, request, *args, **kwargs):
+		user=CustomUser.objects.get(slug=self.kwargs["slug"])
+		status=request.data["paid"]
+		user.paid=status
+		user.save()
+		serializer=self.serializer_class(user, many=False)
+		return Response({"detail":"paid status updated successfully", "user":serializer.data})
+
+# mytoken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc0NDUyMTI5LCJpYXQiOjE2NzQ0NDg1MjksImp0aSI6IjBlMTE3MGNiZTlhYjQ5Y2M5ZmJhZjMzMjNiNGYzYjM2IiwidXNlcl9pZCI6MX0.v1R4B5IPrAqbV0UMpeUTjY4Jz5r5655gJG-M1Uan6jk
 

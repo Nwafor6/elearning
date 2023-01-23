@@ -83,14 +83,14 @@ class UserSerializer(serializers.ModelSerializer):
 		return user
 class UpdateUserSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True, required=False)
-	paid=serializers.BooleanField(required=False)
+	# paid=serializers.BooleanField(required=False)
 	phone_numuber=serializers.CharField(max_length=20,required=False)
-	gender=serializers.CharField(max_length=20,required=False)
+	# gender=serializers.CharField(max_length=20,required=False)
 	github_repo=serializers.URLField(required=False)
 	linkedln_profile=serializers.URLField(required=False)
-	twitter_profile=serializers.URLField(required=False)
+	# twitter_profile=serializers.URLField(required=False)
 	class Meta:
-		fields=["id",'email', 'first_name', 'last_name','password', 'paid','phone_numuber','gender','github_repo','linkedln_profile','twitter_profile','interest','slug','started_on','joined',]
+		fields=["id",'first_name', 'last_name','phone_numuber','github_repo','linkedln_profile','interest','slug','started_on','joined',]
 		model=CustomUser
 		extra_kwargs={'slug':{'read_only':True},'started_on':{'read_only':True},'joined':{'read_only':True}}
 
@@ -143,7 +143,7 @@ class StaffsignupSerializer(serializers.ModelSerializer):
 class UpdateStaffsignupSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True, required=False)
 	class Meta:
-		fields=['email', 'first_name', 'last_name','slug','is_instructor', 'interest','joined']
+		fields=['first_name', 'last_name','slug','is_instructor', 'interest','joined']
 		model=CustomUser
 		extra_kwargs={'is_instructor':{'read_only':True},'joined':{'read_only':True},'slug':{'read_only':True}}
 
@@ -165,6 +165,12 @@ class ContactTeamSerializer(serializers.Serializer):
 	email=serializers.EmailField(required=True)
 	subject=serializers.CharField(max_length=100, required=True)
 	message=serializers.CharField(max_length=500, required=True)
+
+class UpdateStduentPaidStatusSerializer(serializers.ModelSerializer):
+	class Meta:
+		model=CustomUser
+		fields=['paid',]
+		
 
 
 	

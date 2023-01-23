@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404
 from accounts.models import CustomUser
 from rest_framework import status
 
+# Import my custom permissions
+from accounts.permissions import IsStaffOnly
+
 # @api_view(['POST'])
 # def make_addnocement(request):
 # 	if request.method == "POST":
@@ -35,7 +38,7 @@ class MultipleFieldLookupMixin:
 class MakeAnnouncement(generics.ListCreateAPIView):
 	queryset=Announcement.objects.all()
 	serializer_class=AnnouncementSerializer
-	permission_classes=[IsAuthenticated]
+	permission_classes=[IsStaffOnly,IsAuthenticated]
 
 
 	def get(self, request, *args, **kwargs):
@@ -52,12 +55,13 @@ class MakeAnnouncement(generics.ListCreateAPIView):
 class RetriveUpdateAnnouncement(generics.RetrieveUpdateAPIView):
 	queryset=Announcement.objects.all()
 	serializer_class=AnnouncementSerializer
-	permission_classes=[IsAuthenticated]
+	permission_classes=[IsStaffOnly,IsAuthenticated]
 
 
 class DestoryAnnouncement(generics.DestroyAPIView):
 	queryset=Announcement.objects.all()
 	serializer_class=AnnouncementSerializer
+	permission_classes=[IsStaffOnly,IsAuthenticated]
 
 	def delete(self, request, *args, **kwargs):
 		self.object = self.get_object()
@@ -67,19 +71,19 @@ class DestoryAnnouncement(generics.DestroyAPIView):
 class CreateListTrack(generics.ListCreateAPIView):
 	queryset=Track.objects.all()
 	serializer_class=TrackSerializers
-	permission_classes=[IsAuthenticated]
+	permission_classes=[IsStaffOnly,IsAuthenticated]
 
 class RetriveUpdateTrack(generics.RetrieveUpdateAPIView):
 	queryset=Track.objects.all()
 	serializer_class=TrackSerializers
-	permission_classes=[IsAuthenticated]
+	permission_classes=[IsStaffOnly,IsAuthenticated]
 
 # list and create courses by tutors only
 # add tutor permission classs to this view
 class CreateCourse(generics.ListCreateAPIView):
 	queryset=Course.objects.all()
 	serializer_class=CourseSerializer
-	permission_classes=[IsAuthenticated]
+	permission_classes=[IsStaffOnly,IsAuthenticated]
 
 
 
@@ -260,7 +264,7 @@ class PostContentAnswer(generics.ListCreateAPIView):
 class GradeLearnersViews(MultipleFieldLookupMixin, generics.ListCreateAPIView):
 	queryset=LearnerScores.objects.all()
 	serializer_class=GradeLearnerSerializer
-	permission_classes=[IsAuthenticated]
+	permission_classes=[IsStaffOnly,IsAuthenticated]
 
 	def post(self, request, *args, **kwags):
 		score=request.data['score']
