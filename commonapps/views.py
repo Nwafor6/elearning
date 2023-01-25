@@ -97,7 +97,7 @@ class CreateCourse(generics.ListCreateAPIView):
 class AllCoursesView(generics.ListAPIView):
 	queryset=Course.objects.all()
 	serializer_class=CourseSerializer
-	permission_classes=[IsAuthenticated]
+	# permission_classes=[IsAuthenticated]
 
 # list courses based on the requesting tutor
 class MyCourses(generics.ListAPIView):

@@ -7,6 +7,8 @@ from .models import CustomUser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Q
+# imports from commanapp
+from commonapps.models import Track, Course
 
 # User login authentication
 from django.contrib.auth import authenticate, login, logout
@@ -51,6 +53,19 @@ class UpdateRegistraion(viewsets.ModelViewSet):
 		# self.queryset=user
 
 		return Response(serializer.data)
+
+	# def patch(self, request, *args, **kwargs):
+	# 	fields=["id",'first_name', 'last_name','phone_numuber','github_repo','linkedln_profile','track','slug','started_on','joined',]
+	# 	data=request.data
+	# 	track=Track.objects.get(title=request.data["track"])
+	# 	course=track.course_set.all()
+	# 	user=CustomUser.object.get(email=request.user)
+	# 	for i in course:
+	# 		user.interest.add(course)
+	# 	user.save()
+	# 	serializer=self.serializer_class(user, many=False)
+	# 	return Response(serializer.data)
+		
 
 	
 # staff registration

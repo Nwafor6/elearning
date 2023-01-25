@@ -3,6 +3,7 @@ from accounts.models import CustomUser
 from commonapps.models import Track, Course
 from commonapps.serializers import CourseSerializer
 from rest_framework.response import Response
+from rest_framework import status
 
 # IMPORT EXTRA IMPORT TO SEND USERS MAIL TO ACTIVATE THEIR ACCOUNTS
 from django.contrib.sites.shortcuts import get_current_site  
@@ -22,12 +23,13 @@ from django.core.mail import EmailMultiAlternatives
 
 class TrackSerializer(serializers.ModelSerializer):
 	class Meta:
-		models=Track
+		model=Track
 		fields=('title',)
 
 
 class UserSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True, required=False)
+	track=TrackSerializer(many=False, required=False)
 	paid=serializers.BooleanField(required=False)
 	phone_numuber=serializers.CharField(max_length=20,required=False)
 	gender=serializers.CharField(max_length=20,required=False)
@@ -35,9 +37,9 @@ class UserSerializer(serializers.ModelSerializer):
 	linkedln_profile=serializers.URLField(required=False)
 	twitter_profile=serializers.URLField(required=False)
 	class Meta:
-		fields=["id",'email', 'first_name', 'last_name','password', 'paid','phone_numuber','gender','github_repo','linkedln_profile','twitter_profile','interest','slug','started_on','joined',]
+		fields=["id",'email', 'first_name', 'last_name','password','track','paid','phone_numuber','gender','github_repo','linkedln_profile','twitter_profile','interest','slug','started_on','joined',]
 		model=CustomUser
-		extra_kwargs={'slug':{'read_only':True},'started_on':{'read_only':True},'joined':{'read_only':True},'password':{'write_only':True},}
+		extra_kwargs={'interest':{'read_only':True},'slug':{'read_only':True},'started_on':{'read_only':True},'joined':{'read_only':True},'password':{'write_only':True},}
 
 	def create(self, validated_data):
 		_user=self.context['request'].user
@@ -46,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
 			email=validated_data['email'],
 			first_name=validated_data['first_name'],
 			last_name=validated_data['last_name'],
+			track=validated_data['track'],
 			is_learner=True,
 			is_active=False
 
@@ -59,7 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
 		uid=urlsafe_base64_encode(force_bytes(user.pk))
 		token=account_activation_token.make_token(user)
 
-		# Message to be send to the user 
+		# # Message to be send to the user 
 		message=f'''
 			This is for testing mode. Copy the uid which is an harshed id of the user and  
 			also, copy the token. send the  token and uid to the activate account route to activate the user's account 
@@ -68,21 +71,34 @@ class UserSerializer(serializers.ModelSerializer):
 		'''
 		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
 		msg.send()
-		# End mail sending
+		# # End mail sending
 
 		user.save()
-		if interest:
-			for single_intrest in interest:
+		users_track=validated_data['track']
+		# if interest:
+		# 	for single_intrest in interest:
+		# 		user.interest.add(single_intrest.id)
+		# 		course=Course.objects.get(id=single_intrest.id)
+		# 		course.enrolled_users.add(_user.id)
+		# 		course.save()
+		# user.save()
+		if users_track:
+			try:
+				track=Track.objects.get(title=users_track)
+				
+			except:
+				return Response({"error":"No such track"},status=status.HTTP_400_BAD_REQUEST)
+			course=track.course_set.all()
+			for single_intrest in course:
 				user.interest.add(single_intrest.id)
 				course=Course.objects.get(id=single_intrest.id)
-				course.enrolled_users.add(_user.id)
+				course.enrolled_users.add(user.id)
 				course.save()
 		user.save()
-
-
 		return user
+
 class UpdateUserSerializer(serializers.ModelSerializer):
-	interest=CourseSerializer(many=True, required=False)
+	# Track=TrackSerializer(many=False, required=False)
 	# paid=serializers.BooleanField(required=False)
 	phone_numuber=serializers.CharField(max_length=20,required=False)
 	# gender=serializers.CharField(max_length=20,required=False)
@@ -90,7 +106,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 	linkedln_profile=serializers.URLField(required=False)
 	# twitter_profile=serializers.URLField(required=False)
 	class Meta:
-		fields=["id",'first_name', 'last_name','phone_numuber','github_repo','linkedln_profile','interest','slug','started_on','joined',]
+		fields=["id",'first_name', 'last_name','phone_numuber','github_repo','linkedln_profile','slug','started_on','joined',]
 		model=CustomUser
 		extra_kwargs={'slug':{'read_only':True},'started_on':{'read_only':True},'joined':{'read_only':True}}
 

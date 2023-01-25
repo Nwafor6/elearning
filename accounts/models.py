@@ -19,6 +19,7 @@ class CustomUser(AbstractUser):
 	is_instructor=models.BooleanField(default=False)
 	is_admin = models.BooleanField(default=False)
 	slug=models.SlugField(blank=True, unique=True, null=True)
+	track=models.ForeignKey(Track,on_delete=models.SET_NULL, blank=True,null=True)
 	interest=models.ManyToManyField(Course,null=True, blank="True")
 	started_on=models.DateTimeField(auto_now_add=False, auto_now=False, null=True, blank=True)
 	joined=models.DateTimeField(auto_now_add=True)
