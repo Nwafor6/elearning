@@ -29,7 +29,7 @@ class TrackSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True, required=False)
-	track=TrackSerializer(many=False, required=False)
+	# track=TrackSerializer(many=False, required=False)
 	paid=serializers.BooleanField(required=False)
 	phone_numuber=serializers.CharField(max_length=20,required=False)
 	gender=serializers.CharField(max_length=20,required=False)
@@ -71,6 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
 		'''
 		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
 		msg.send()
+
 		# # End mail sending
 
 		user.save()
@@ -113,19 +114,22 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
 class StaffsignupSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True, required=False)
+	# track=TrackSerializer(many=False, required=False)
 	class Meta:
-		fields=['email', 'first_name', 'last_name',"password",'slug','is_instructor', 'interest','joined','is_instructor']
+		fields=['email', 'first_name', 'last_name',"password",'slug','is_instructor','track', 'interest','joined','is_instructor']
 		model=CustomUser
-		extra_kwargs={'is_instructor':{'read_only':True},'joined':{'read_only':True},'slug':{'read_only':True}}
+		extra_kwargs={'interest':{'read_only':True},'is_instructor':{'read_only':True},'joined':{'read_only':True},'slug':{'read_only':True}}
 
 	def create(self, validated_data):
 		interest=validated_data.pop('interest', None)
+		print(validated_data)
 		user=CustomUser(
 			email=validated_data['email'],
 			first_name=validated_data['first_name'],
 			last_name=validated_data['last_name'],
 			is_instructor=True,
-			is_active=False
+			is_active=False,
+			track=validated_data['track'],
 
 			)
 		user.set_password(validated_data['password'])
@@ -148,18 +152,35 @@ class StaffsignupSerializer(serializers.ModelSerializer):
 		msg.send()
 		# End mail sending
 
+		# user.save()
+		# if interest:
+		# 	for single_intrest in interest:
+		# 		user.interest.add(single_intrest.id)
+		# user.save()
+		# return user
 		user.save()
-		if interest:
-			for single_intrest in interest:
+		users_track=validated_data['track']
+		if users_track:
+			try:
+				track=Track.objects.get(title=users_track)
+				
+			except:
+				return Response({"error":"No such track"},status=status.HTTP_400_BAD_REQUEST)
+			course=track.course_set.all()
+			for single_intrest in course:
 				user.interest.add(single_intrest.id)
+				course=Course.objects.get(id=single_intrest.id)
+				course.enrolled_users.add(user.id)
+				course.save()
 		user.save()
 		return user
+
 
 
 class UpdateStaffsignupSerializer(serializers.ModelSerializer):
 	interest=CourseSerializer(many=True, required=False)
 	class Meta:
-		fields=['first_name', 'last_name','slug','is_instructor', 'interest','joined']
+		fields=['first_name', 'last_name','slug','is_instructor','joined']
 		model=CustomUser
 		extra_kwargs={'is_instructor':{'read_only':True},'joined':{'read_only':True},'slug':{'read_only':True}}
 

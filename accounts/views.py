@@ -53,18 +53,6 @@ class UpdateRegistraion(viewsets.ModelViewSet):
 		# self.queryset=user
 
 		return Response(serializer.data)
-
-	# def patch(self, request, *args, **kwargs):
-	# 	fields=["id",'first_name', 'last_name','phone_numuber','github_repo','linkedln_profile','track','slug','started_on','joined',]
-	# 	data=request.data
-	# 	track=Track.objects.get(title=request.data["track"])
-	# 	course=track.course_set.all()
-	# 	user=CustomUser.object.get(email=request.user)
-	# 	for i in course:
-	# 		user.interest.add(course)
-	# 	user.save()
-	# 	serializer=self.serializer_class(user, many=False)
-	# 	return Response(serializer.data)
 		
 
 	
@@ -205,6 +193,3 @@ class UpdateStudentPaidStatus(generics.RetrieveUpdateAPIView):
 		user.save()
 		serializer=self.serializer_class(user, many=False)
 		return Response({"detail":"paid status updated successfully", "user":serializer.data})
-
-# mytoken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc0NDUyMTI5LCJpYXQiOjE2NzQ0NDg1MjksImp0aSI6IjBlMTE3MGNiZTlhYjQ5Y2M5ZmJhZjMzMjNiNGYzYjM2IiwidXNlcl9pZCI6MX0.v1R4B5IPrAqbV0UMpeUTjY4Jz5r5655gJG-M1Uan6jk
-

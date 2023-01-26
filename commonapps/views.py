@@ -68,7 +68,12 @@ class DestoryAnnouncement(generics.DestroyAPIView):
 		self.object.delete()
 		return Response({"success":'Delete successful'})
 
-class CreateListTrack(generics.ListCreateAPIView):
+class ListTrack(generics.ListAPIView):
+	queryset=Track.objects.all()
+	serializer_class=TrackSerializers
+	permission_classes=[AllowAny]
+
+class CreateTrack(generics.CreateAPIView):
 	queryset=Track.objects.all()
 	serializer_class=TrackSerializers
 	permission_classes=[IsStaffOnly,IsAuthenticated]
