@@ -178,7 +178,6 @@ class StaffsignupSerializer(serializers.ModelSerializer):
 
 
 class UpdateStaffsignupSerializer(serializers.ModelSerializer):
-	interest=CourseSerializer(many=True, required=False)
 	class Meta:
 		fields=['first_name', 'last_name','slug','is_instructor','joined']
 		model=CustomUser
