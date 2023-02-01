@@ -21,7 +21,7 @@ class CourseSerializer(serializers.ModelSerializer):
 	enrolled_users=ModifiedUserSerializer(many=True, required=False)
 	class Meta:
 		model=Course
-		fields=['id','tutor','track','title','description','course_img','total_point','slug','enrolled_users']
+		fields=['id','tutor','track','title','description','duration','level','course_img','total_point','slug','enrolled_users']
 		extra_kwargs={'id':{'read_only':True},'slug':{'read_only':True},'created':{'read_only':True}}
 
 

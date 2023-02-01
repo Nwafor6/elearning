@@ -36,6 +36,8 @@ class Course(models.Model):
 	track=models.ForeignKey(Track, on_delete=models.CASCADE)
 	title=models.CharField(max_length=200)
 	description=models.TextField()
+	duration=models.CharField(max_length=100, blank=True, null=True)
+	level=models.CharField(max_length=100, blank=True, null=True)
 	course_img=models.ImageField(blank=True, null=True)
 	total_point=models.PositiveIntegerField(default=100)
 	enrolled_users=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="students", null=True, blank=True)
