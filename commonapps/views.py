@@ -104,6 +104,12 @@ class AllCoursesView(generics.ListAPIView):
 	serializer_class=CourseSerializer
 	# permission_classes=[IsAuthenticated]
 
+# Course Detailed View
+class CourseDetailView(generics.RetrieveAPIView):
+	queryset=Course.objects.all()
+	serializer_class=CourseSerializer
+	# permission_classes=[IsAuthenticated]
+
 # list courses based on the requesting tutor
 class MyCourses(generics.ListAPIView):
 	queryset=Course.objects.all()
