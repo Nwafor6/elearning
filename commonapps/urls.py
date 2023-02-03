@@ -43,7 +43,7 @@ path('add-new-track/', views.CreateTrack.as_view()),
 path('update-track/<str:pk>/', views.RetriveUpdateTrack.as_view()),
 path('create-course/', views.CreateCourse.as_view()),
 # allow user featch single course
-path("course_detail/<str:pk>/,", views.CourseDetailView.as_view()),
+path("course_detail/<str:pk>/", views.CourseDetailView.as_view()),
 # path('update-course/<slug:slug>/',views.UpdateRegisterCourse.as_view()),
 path('create-course-module/', views.CreateCourseModule.as_view()),
 path('update-course-module/<slug:slug>/',views.UpdateCourseModule.as_view()),
