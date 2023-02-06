@@ -37,6 +37,7 @@ class Course(models.Model):
 	title=models.CharField(max_length=200)
 	description=models.TextField()
 	duration=models.CharField(max_length=100, blank=True, null=True)
+	lesson_duration=models.CharField(max_length=100, blank=True, null=True)
 	level=models.CharField(max_length=100, blank=True, null=True)
 	course_img=models.ImageField(blank=True, null=True)
 	total_point=models.PositiveIntegerField(default=100)
