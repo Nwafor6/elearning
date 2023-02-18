@@ -70,9 +70,7 @@ class UserSerializer(serializers.ModelSerializer):
 		# 	udi:{uid}, token:{token}
 		
 		# '''
-		message=f'''Dear {user.first_name} {user.last_name}
-				
-		Thank you for your interest, we have recorded your response and we will get back to you in 24hrs.
+		message=f'''Dear {user.first_name} {user.last_name} \n Thank you for your interest, we have recorded your response and we will get back to you in 24hrs.
 		
 		'''
 		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
