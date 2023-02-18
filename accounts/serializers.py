@@ -75,7 +75,7 @@ class UserSerializer(serializers.ModelSerializer):
 				Thank you for your interest, we have recored your response and we will get back to you soon.
 		
 		'''
-		msg= our(subject, message,'info@scholarsjoint.com.ng',[to_email])
+		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
 		msg.send()
 
 		# # End mail sending
