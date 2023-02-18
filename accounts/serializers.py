@@ -72,7 +72,7 @@ class UserSerializer(serializers.ModelSerializer):
 		# '''
 		message=f'''Dear {user.first_name} {user.last_name}
 				
-				Thank you for your interest, we have recored your response and we will get back to you soon.
+		Thank you for your interest, we have recorded your response and we will get back to you in 24hrs.
 		
 		'''
 		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
