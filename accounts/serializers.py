@@ -56,20 +56,26 @@ class UserSerializer(serializers.ModelSerializer):
 		user.set_password(validated_data['password'])
 		# DEACTIVATE USER TO ACTIVATE VIA EMAIL 
 		to_email=validated_data['email']
-		subject="Account Activation "
+		# subject="Account Activation "
+		subject="Scholarsjoint Skill Aquisition 1.0"
 		user.save()
 		# current_site=self.context['request'].domain
 		uid=urlsafe_base64_encode(force_bytes(user.pk))
 		token=account_activation_token.make_token(user)
 
 		# # Message to be send to the user 
-		message=f'''
-			This is for testing mode. Copy the uid which is an harshed id of the user and  
-			also, copy the token. send the  token and uid to the activate account route to activate the user's account 
-			udi:{uid}, token:{token}
+		# message=f'''
+		# 	This is for testing mode. Copy the uid which is an harshed id of the user and  
+		# 	also, copy the token. send the  token and uid to the activate account route to activate the user's account 
+		# 	udi:{uid}, token:{token}
+		
+		# '''
+		message=f'''Dear {user.first_name} {user.last_name}
+				
+				Thank you for your interest, we have recored your response and we will get back to you soon.
 		
 		'''
-		msg= EmailMultiAlternatives(subject, message,'info@scholarsjoint.com.ng',[to_email])
+		msg= our(subject, message,'info@scholarsjoint.com.ng',[to_email])
 		msg.send()
 
 		# # End mail sending
